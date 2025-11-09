@@ -12,7 +12,7 @@ def node_1(state: State) :
     new_state: State = {}   # type: ignore
 
     if state.get("customer_name") is None:
-        new_state["customer_name"] = "Alice"
+        new_state["customer_name"] = "Alice"    
         new_state["messages"] = [
             HumanMessage(content=f"Mi mobre es {new_state['customer_name']}.")
         ]
