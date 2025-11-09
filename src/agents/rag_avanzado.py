@@ -115,14 +115,14 @@ def should_continue(state: State):
 # Construir el grafo
 builder = StateGraph(State)
 builder.add_node("agent", agent_node)
-builder.add_node("tools", tool_node)
+builder.add_node("tool_node", tool_node)
 
 builder.add_edge(START, "agent")
 builder.add_conditional_edges(
     "agent",
     should_continue,
     {
-        "tools": "tools",
+        "tools": "tool_node",
         "end": END
     }
 )

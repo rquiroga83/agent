@@ -5,6 +5,8 @@ from langchain_deepseek import ChatDeepSeek
 from pydantic import BaseModel, Field
 from langchain_core.messages import AIMessage, SystemMessage, ToolMessage, HumanMessage
 
+model = ChatDeepSeek(model="deepseek-chat", temperature=0.0)
+
 class ContactInfo(BaseModel):   
     name: str = Field(description="The name of the person")
     phone: str = Field(description="The phone number of the person")
@@ -13,17 +15,17 @@ class ContactInfo(BaseModel):
     age: int = Field(description="The age of the person")
     sentiment: str = Field(description="The sentiment of the message, either positive, negative, or neutral")
 
-model = ChatDeepSeek(model="deepseek-chat", temperature=0.0)
-
 SYSTEM_PROMPT = """Eres un asistente que extrae informacion de conversaciones con clientes.
 Extrae el nombre del cliente, su numero de telefono, su correo electronico, la edad del cliente,
-el tono del mensaje (0-100) y el sentimiento del mensaje (positivo, negativo o neutral)."""
+el tono del mensaje (0-100) y el sentimiento del mensaje (positivo, negativo o neutral).
+Si no puedes encontrar alguno de estos datos, no asignes ningun valor a ese campo."""
 
 def extractor_node(state: State) :
     new_state: State = {}   # type: ignore
     history = state["messages"]
 
-    if state.get("customer_name") is None:
+    # si es nome o strong vacio
+    if state.get("customer_name") is None or state.get("customer_name") == "":
         model_whith_schema = model.with_structured_output(schema=ContactInfo)
         contact_info= model_whith_schema.invoke([SystemMessage(content=SYSTEM_PROMPT)] + history)
 
