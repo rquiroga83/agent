@@ -40,13 +40,3 @@ def conversation_node(state: State) :
     return {"messages": [response]}
 
 
-"""
-tools=[buscar_optimizacion_web_mobile]
-
-conversation_node  = create_agent(
-    model, 
-    tools=tools,
-    system_prompt="Eres un asistente que da informacion sobre programacion a los usuarios."
-)
-"""
-

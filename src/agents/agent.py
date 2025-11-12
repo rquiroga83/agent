@@ -1,4 +1,6 @@
+from agents.nodes.booking import booking_node
 from agents.nodes.rag import rag_node
+from agents.nodes.route import route_node
 from agents.state import State
 from langgraph.graph import StateGraph, START, END, MessagesState
 from agents.nodes.conversation import conversation_node
@@ -23,9 +25,14 @@ builder = StateGraph(State)
 builder.add_node("conversation_node", conversation_node)
 builder.add_node("extractor_node", extractor_node)
 builder.add_node("rag_node", rag_node)
+builder.add_node("booking_node", booking_node)
 
 builder.add_edge(START, "extractor_node")
-builder.add_edge("extractor_node", "conversation_node")
+builder.add_conditional_edges("extractor_node", route_node, {
+    "conversation": "conversation_node",
+    "booking": "booking_node"
+})
+#builder.add_edge("extractor_node", "conversation_node")
 builder.add_conditional_edges(
     "conversation_node",
     should_continue,
